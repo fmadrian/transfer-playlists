@@ -9,7 +9,6 @@ from src.spotify_playlist import SpotifyPlaylist
 # youtube dl
 import youtube_dl
 from src.log import Log
-from youtube_dl import DownloadError
 
 class YoutubePlaylist:
     # https://developers.google.com/youtube/v3/docs/videos/list#try-it
@@ -46,7 +45,9 @@ class YoutubePlaylist:
 
     # Get videos in 'Liked videos'
     def get_liked_videos(self):
-        # https://developers.google.com/youtube/v3/docs/videos/list#try-it
+        # https://developers.google.com/youtube/v3/docs/videos/list
+        # Each object in items is a video.
+        # https://developers.google.com/youtube/v3/docs/videos#resource
         try: 
             request = self.youtube.videos().list(
                 part= "snippet,contentDetails,statistics",
@@ -54,10 +55,13 @@ class YoutubePlaylist:
                 maxResults= 50 # 5 by default, 50 videos max.
             )
             response = request.execute()
-            # Each object in items is a video.
-            # https://developers.google.com/youtube/v3/docs/videos#resource
-            songs = {}
-            for item in response["items"]:
+            playlist_items = response["items"]
+            
+            if(response.get("nextPageToken") != None):
+                playlist_items = self.get_more_videos(response["nextPageToken"], response["items"], "liked")
+
+            songs = []
+            for item in playlist_items:
                 try:
                     # Getting the video's title and id
                     video_title = item["snippet"]["title"]
@@ -81,12 +85,12 @@ class YoutubePlaylist:
                     # After we get a URI, we add it to the retrieved songs list.
                     spotify_uri = SpotifyPlaylist().get_spotify_uri(video_info["track"], video_info["artist"])
                     if (spotify_uri != None):
-                        songs[video_title] = {
-                            "video_url" : video_url,
-                            "song_name" : video_info["track"],
-                            "artist" : video_info["artist"],
+                        songs.append({
+                            "video_url": video_url,
+                            "song_name": video_info["track"],
+                            "artist": video_info["artist"],
                             "spotify_uri": spotify_uri
-                        }
+                        })
                 except (YoutubeError, YoutubeDLError) as e:
                     e.log_print()
             return songs
@@ -102,9 +106,13 @@ class YoutubePlaylist:
                 playlistId=playlist_id,
             )
             response = request.execute()
+            playlist_items = response["items"]
 
-            songs = {}
-            for item in response["items"]:
+            if(response.get("nextPageToken") != None):
+                playlist_items = self.get_more_videos(response["nextPageToken"], response["items"], "playlist", playlist_id)
+
+            songs = []
+            for item in playlist_items:
                 try:
                     # Get the video's ID and title.
 
@@ -132,12 +140,12 @@ class YoutubePlaylist:
                     # After we get a URI, we add it to the retrieved songs list.
                     spotify_uri = SpotifyPlaylist().get_spotify_uri(video_info["track"], video_info["artist"])
                     if (spotify_uri !=  None):
-                        songs[video_title] = {
+                        songs.append({
                             "video_url": video_url,
                             "song_name": video_info["track"],
                             "artist": video_info["artist"],
                             "spotify_uri": spotify_uri
-                        }
+                        })
                 except YoutubeDLError as e:
                     e.log_print()
 
@@ -162,3 +170,29 @@ class YoutubePlaylist:
             }
         except (YoutubeError, Exception):
             raise
+
+    def get_more_videos(self, nextPageToken, items, type, playlist_id=None):
+        if(type == 'liked'):
+            request = self.youtube.videos().list(
+                    part= "snippet,contentDetails,statistics",
+                    myRating= "like",
+                    pageToken=nextPageToken,
+                    maxResults= 50 # 5 by default, 50 videos max.
+            )
+        elif(type == 'playlist'):
+            request = self.youtube.playlistItems().list(
+                part="snippet,id,contentDetails",
+                maxResults=50,  # 5 by default.
+                pageToken=nextPageToken,
+                playlistId=playlist_id,
+            )
+        
+        response = request.execute()    
+        # Add the videos to the list.
+        for item in response["items"]:
+            items.append(item)
+            
+        if(response.get("nextPageToken") != None):
+            return self.get_more_videos(response["nextPageToken"], items, type, playlist_id)     
+        else: 
+           return items

@@ -36,20 +36,10 @@ class SpotifyPlaylist:
                 raise SpotifyError(request, response)
             else:
                 user = response.json()
-                msg = "Spotify ID: {}\n Name: {}\n Followers: {} \n Type: {}".format(
+                msg = "Spotify ID: {}\n Name: {}\n Type: {}".format(
                     user["external_urls"]["spotify"],
                     user["display_name"],
-                    user["followers"]["total"],
                     user["product"])
-
-                """
-                user = response.json()
-                msg = "Spotify ID: {}\n Name: {}\n Followers: {} \n Type: {}".format(
-                    user[external_urls]["spotify"],
-                    user.display_name,
-                    user.followers["total"],
-                    user.product)
-                """
                 Log().write_info("", msg)
                 return True
         except (SpotifyError, Exception):
@@ -115,10 +105,17 @@ class SpotifyPlaylist:
     # adds a list of songs to the playlist.
     def add_songs_to_playlist(self, spotify_playlist_id, songs):
         try:
+            extra_songs = []
+            # It can only add up to 100 songs per request.
+            if(len(songs) > 100):
+                # Has to cut from the array the extra songs to add them using other request.
+                extra_songs = songs[100:]
+                songs = songs[:100]
+
             uris = []
             # We get the songs URI's 
             for song in songs:
-                uris.append(songs[song]["spotify_uri"])
+                uris.append(song["spotify_uri"])
             request = "add_tracks_to_playlist"
             query = urls.spotify[request].format(spotify_playlist_id)
 
@@ -129,12 +126,17 @@ class SpotifyPlaylist:
                 "Content-Type": "application/json",
                 "Authorization": "Bearer {}".format(self.token)
             }
-            response = requests.put(query, data=request_data, headers=request_headers)
+            response = requests.post(query, data=request_data, headers=request_headers)
             response_code = response.status_code
 
             if(response_code != 200 and response_code != 201):
                 raise SpotifyError(request, response)
 
             Log().write_info(request, messages.spotify["songs_added"].format(spotify_playlist_id))
+
+            # If there's extra songs, make another request to add them.
+            if(len(extra_songs) > 0):
+                self.add_songs_to_playlist(spotify_playlist_id, extra_songs)
+
         except (SpotifyError, Exception):
             raise

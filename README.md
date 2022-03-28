@@ -1,6 +1,6 @@
 # syplaylist
 
-Script that transfers songs from playlists or liked videos from to a Spotify playlist.
+Script that transfers songs from playlists or liked videos from YouTube to a Spotify playlist.
 
 ## Requirements
 
@@ -123,9 +123,8 @@ Before using the script you need an Oauth Token provided by Spotify.
 
 ## Known issues
 
-- Only the first 50 songs in a playlist or liked videos will be transferred.
-- You requests might not be completed if you exceed Spotify's and / or YouTube's usage quota.
-- The script can only retrieve Youtube's public videos.
+- Your request might not be completed if you exceed Spotify and / or YouTube API usage quota.
+- The script can only retrieve music from public and not age-restricted videos.
 
 ## Resources used
 
