@@ -45,7 +45,7 @@ class SpotifyPlaylist:
         except (SpotifyError, Exception):
             raise
     # Create a Spotify playlist.
-    def create_playlist(self, name="YouTube liked videos", description="Playlist that has music found in YouTube liked videos.", public=True):
+    def create_playlist(self, name="YouTube liked videos", description="Playlist that has music found in the user's YouTube liked videos.", public=True):
         try:
             # url = query, data = body , headers = request_headers
             request = "create_playlist"
@@ -67,7 +67,7 @@ class SpotifyPlaylist:
 
             # Returns the playlist's id (we need it to add the songs)
             Log().write_info(request, messages.spotify["playlist_created"].format(name, response.json()["id"]))
-            return response.json()["id"]
+            return response.json()
         except (SpotifyError, Exception) as e:
             raise
 
@@ -95,7 +95,8 @@ class SpotifyPlaylist:
 
             # We get the first result of the search and return that song's URI.
             song_uri = songs[0]["uri"]
-            Log().write_info(request, messages.spotify["got_song_uri"].format(song_name, artist, song_uri))
+            song_url = songs[0]["external_urls"]["spotify"]
+            Log().write_info(request, messages.spotify["got_song_uri"].format(song_name, artist, song_url))
             return song_uri
         except SpotifyError as e:
             e.log_print()
@@ -103,8 +104,9 @@ class SpotifyPlaylist:
             Log().write_error(e)
 
     # adds a list of songs to the playlist.
-    def add_songs_to_playlist(self, spotify_playlist_id, songs):
+    def add_songs_to_playlist(self, playlist, songs):
         try:
+            playlist_id = playlist["id"]
             extra_songs = []
             # It can only add up to 100 songs per request.
             if(len(songs) > 100):
@@ -117,7 +119,7 @@ class SpotifyPlaylist:
             for song in songs:
                 uris.append(song["spotify_uri"])
             request = "add_tracks_to_playlist"
-            query = urls.spotify[request].format(spotify_playlist_id)
+            query = urls.spotify[request].format(playlist_id)
 
             request_data = json.dumps({
                 "uris": uris,
@@ -131,12 +133,12 @@ class SpotifyPlaylist:
 
             if(response_code != 200 and response_code != 201):
                 raise SpotifyError(request, response)
-
-            Log().write_info(request, messages.spotify["songs_added"].format(spotify_playlist_id))
+            # Name, id, URL.
+            Log().write_info(request, messages.spotify["songs_added"].format(playlist["name"], playlist_id, playlist["external_urls"]["spotify"]))
 
             # If there's extra songs, make another request to add them.
             if(len(extra_songs) > 0):
-                self.add_songs_to_playlist(spotify_playlist_id, extra_songs)
+                self.add_songs_to_playlist(playlist, extra_songs)
 
         except (SpotifyError, Exception):
             raise

@@ -17,10 +17,10 @@ class Log:
     def write(self, log):
         try:
             log_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            file = open("{}.txt".format(self.logname), "a")
+            file = open("{}.txt".format(self.logname), "a", encoding='utf-8')
             msg = "[{0}] - {1}\n".format(log_time, log)
             file.write(msg)
-            print (msg)
+            print(msg)
         except FileNotFoundError:
             self.create()
             self.write(log)
@@ -31,4 +31,4 @@ class Log:
     def write_error(self, error):
         self.write("{} {}".format("", error))
     def write_info(self, function, info):
-        self.write("{} {} {}".format("", function, info))
+        self.write("{} {}".format("", info))

@@ -7,9 +7,9 @@ log = {
 spotify = {
     "no_auth_info" : "The Spotify authentication information (spotify_auth.json) didn't exist or is not valid. Please fill the file with the information required.",
     "no_songs" : "No results for {} by {}", # Got song information, but we can't find it in Spotify
-    "got_song_uri" : "Got {} by {} . URI: {}",
+    "got_song_uri" : "Got {} by {}. URL: {}",
     "playlist_created" : "Spotify playlist created. Name: {} ID: {} ",
-    "songs_added" : "Songs have been added to {} playlist."
+    "songs_added" : "Songs have been added to {} ({}) playlist. URL: {}"
 }
 youtube ={
     "info_incomplete" : "Could not get enough information for : {} {}", # youtube-dl couldn't get song information in the video
