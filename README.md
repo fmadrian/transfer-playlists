@@ -1,4 +1,4 @@
-# syplaylist
+# transfer-playlists
 
 Script that transfers songs from playlists or liked videos from YouTube to a Spotify playlist.
 
@@ -17,7 +17,7 @@ Script that transfers songs from playlists or liked videos from YouTube to a Spo
 Run the following command:
 
 ```
-python syplaylist.py -liked
+python transfer.py
 ```
 
 **After this, the file spotify_auth.json will be generated.**
@@ -39,7 +39,7 @@ python syplaylist.py -liked
 10. Click the **Create** button.
 11. Click the **Download JSON** button.
 12. Rename the downloaded JSON file to **client_id**.
-13. Copy and paste the file in the folder.
+13. Copy and paste the file in the folder where _transfer.py_ is.
 
 ### Get your Spotify ID
 
@@ -71,20 +71,20 @@ Use the following commands:
 Shows the help guide:
 
 ```
-python syplaylist.py -h
-python syplaylist.py -help
+python transfer.py -h
+python transfer.py -help
 ```
 
 Transfer a YouTube playlist:
 
 ```
-python syplaylist.py <playlist_url>
+python transfer.py <playlist_url>
 ```
 
 Transfer your liked videos:
 
 ```
-python syplaylist.py -liked
+python transfer.py -liked
 ```
 
 1. Go to the URL displayed in the console (Get a YouTube authorization code).
