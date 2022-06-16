@@ -86,12 +86,21 @@ Transfer a YouTube playlist:
 ```
 python transfer.py <playlist_url>
 ```
+<p align="center">
+   <img alt="YouTube playlist - YouTube" title="YouTube playlist - YouTube" src="https://user-images.githubusercontent.com/47431198/174152878-29fcd2f5-5fef-43af-9604-5a1fe2e9c723.png" width=472 height=333>
+   <img alt="YouTube playlist - Spotify" title="YouTube playlist - Spotify" src="https://user-images.githubusercontent.com/47431198/174154383-637b23b4-2d18-4e04-88b2-3a3f7cd85475.png" width=472 height=333>
+
+</p>
 
 Transfer your liked videos:
 
 ```
 python transfer.py -liked
 ```
+<p align="center">
+   <img alt="Liked videos - YouTube" title="Liked videos - YouTube" src="https://user-images.githubusercontent.com/47431198/174153719-635f02b6-486b-40d2-9546-5bfd6fea727c.png" width=472 height=333>
+   <img alt="Liked videos - Spotify" title="Liked videos - Spotify" src="https://user-images.githubusercontent.com/47431198/174152538-f376197b-bba5-4691-bc04-697755440c9a.png" width=472 height=333>
+</p>
 
 1. Go to the URL displayed in the console (Get a YouTube authorization code).
 
