@@ -8,7 +8,9 @@ Script that transfers songs from playlists or liked videos from YouTube to a Spo
 2. A [Google cloud app](https://console.cloud.google.com/) with YouTube Data API v3 enabled.
 3. Approve the [Spotify for Developers: Console](https://developer.spotify.com/console/)
 
-## Install the script dependencies
+## Setup
+
+### Install the script dependencies
 
 To install the script dependencies run:
 
@@ -16,7 +18,7 @@ To install the script dependencies run:
 pip install -r requirements.txt
 ```
 
-## Generate the spotify_auth.json file
+### Generate the spotify_auth.json file
 
 **NOTE: You only have follow these steps once.**
 
@@ -53,9 +55,12 @@ python transfer.py
 2. Copy the value in the field **'Username'**.
 3. Paste it into **spotify_auth.json** in the **'user_id'** field.
 
-### Approve Spotify for Developers: Console
+### How to get a Spotify token | Approve Spotify for Developers: Console
 
-1. Go to [Spotify API: Get users profile](https://developer.spotify.com/console/get-users-profile/)
+Before using the script you need an OAuth Token provided by the Spotify .
+**NOTE: API tokens obtain this method expire after an hour. If a token expires, you need to repeat these steps.**
+
+1. Go to [Spotify API: Get users profile](https://developer.spotify.com/console/get-users-profile/).
 2. Press the **GET TOKEN** button.
 3. Select the following scopes:
 
@@ -67,25 +72,21 @@ python transfer.py
    **NOTE: You can select all the scopes EXCEPT 'playlist-read-public'**.
 
 4. Click the **REQUEST TOKEN** button.
-5. You need to approve the **Spotify for Developers: Console**.
-6. Press **AGREE** button.
+5. Copy the value displayed in the field **'OAuth Token'**.
+6. Paste it into **spotify_auth.json** in the **'token'** field.
 
-## How to use the script
+**NOTE: You will have to approve the Spotify for Developers: Console, the first time you try to get a token.**
 
-Use the following commands:
-
-Shows the help guide:
-
-```
-python transfer.py -h
-python transfer.py -help
-```
+## Commands
 
 Transfer a YouTube playlist:
 
 ```
 python transfer.py <playlist_url>
 ```
+
+Example: [YouTube](https://www.youtube.com/playlist?list=PLXo96vlNmlLKcHgZEkpZ2lS32kh-h4BAa) | [Spotify](https://open.spotify.com/playlist/2w6IqJ1Zt6myya1nG1K0Et)
+
 <p align="center">
    <img alt="YouTube playlist - YouTube" title="YouTube playlist - YouTube" src="https://user-images.githubusercontent.com/47431198/174152878-29fcd2f5-5fef-43af-9604-5a1fe2e9c723.png" width=472 height=333>
    <img alt="YouTube playlist - Spotify" title="YouTube playlist - Spotify" src="https://user-images.githubusercontent.com/47431198/174154383-637b23b4-2d18-4e04-88b2-3a3f7cd85475.png" width=472 height=333>
@@ -97,49 +98,44 @@ Transfer your liked videos:
 ```
 python transfer.py -liked
 ```
+
 <p align="center">
    <img alt="Liked videos - YouTube" title="Liked videos - YouTube" src="https://user-images.githubusercontent.com/47431198/174153719-635f02b6-486b-40d2-9546-5bfd6fea727c.png" width=472 height=333>
    <img alt="Liked videos - Spotify" title="Liked videos - Spotify" src="https://user-images.githubusercontent.com/47431198/174152538-f376197b-bba5-4691-bc04-697755440c9a.png" width=472 height=333>
 </p>
 
-1. Go to the URL displayed in the console (Get a YouTube authorization code).
+Shows the help guide:
+
+```
+python transfer.py -h
+python transfer.py -help
+```
+
+## How to use the script
+
+1. Type one of the two commands.
+
+2. Go to the URL displayed in the console (Get a YouTube authorization code).
 
    **After this, the browser will display a prompt indicating the permissions (scopes) the app requires. You have to authorize it.**
 
-2. Authorize your app.
+3. Authorize your app.
 
    **After this, the browser will display an authorization code**
 
-3. Copy the authorization code displayed in the prompt and paste it in the console.
-4. Press 'Enter'.
-5. Wait until the process is done.
-6. You will get a Spotify playlist with the name **'YouTube liked videos'** (if you transferred your liked videos) or **the name of the YouTube playlist**.
+4. Copy the authorization code displayed in the prompt and paste it in the console.
+5. Press 'Enter'.
+6. Wait until the script transfers the songs.
+7. You will get a Spotify playlist with the name **'YouTube liked videos'** (if you transferred your liked videos) or **the name of the YouTube playlist**.
 
 **NOTE: After using the script, check the 'log.txt' file to see which songs were and weren't transferred to the playlist.**
-
-### How to get a Spotify token
-
-Before using the script you need an OAuth Token provided by the Spotify .
-**NOTE: API tokens obtain this method expire after an hour. If a token expires, you need to repeat these steps.**
-
-1. Go to [Spotify API: Get users profile](https://developer.spotify.com/console/get-users-profile/).
-2. Select the following scopes:
-
-   - user-read-private
-   - user-read-email
-   - playlist-modify-public
-   - playlist-modify-private
-
-   **NOTE: You can select all the scopes EXCEPT 'playlist-read-public'**.
-
-3. Click the **REQUEST TOKEN** button.
-4. Copy the value displayed in the field **'OAuth Token'**.
-5. Paste it into **spotify_auth.json** in the **'token'** field.
 
 ## Additional information
 
 - Some songs might not be transferred if you exceed Spotify and / or YouTube API usage quota.
-- The script can only retrieve music from public and not age-restricted videos.
+- The script can only retrieve music from public videos.
+- youtube-dl might not be able to retrieve information about some songs.
+- Some songs might not be available on Spotify.
 
 ## Resources used
 
