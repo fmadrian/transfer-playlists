@@ -119,7 +119,7 @@ class YoutubePlaylist:
                     # https://developers.google.com/youtube/v3/docs/playlistItems/list
                     video_title = item["snippet"]["title"]
                     video_url = urls.youtube["video"].format(item["contentDetails"]["videoId"])
-                    # https://github.com/ytdl-org/youtube-dl#developer-instructions     EMBEDDING YOUTUBE-DL
+                    # https://github.com/ytdl-org/youtube-dl#developer-instructions
                     # Get song and artist's name using youtube_dl
                     
                     try:

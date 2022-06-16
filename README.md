@@ -8,11 +8,17 @@ Script that transfers songs from playlists or liked videos from YouTube to a Spo
 2. A [Google cloud app](https://console.cloud.google.com/) with YouTube Data API v3 enabled.
 3. Approve the [Spotify for Developers: Console](https://developer.spotify.com/console/)
 
-## Getting ready
+## Install the script dependencies
 
-**NOTE: You only have follow these steps the first time.**
+To install the script dependencies run:
+
+```
+pip install -r requirements.txt
+```
 
 ## Generate the spotify_auth.json file
+
+**NOTE: You only have follow these steps once.**
 
 Run the following command:
 
@@ -39,7 +45,7 @@ python transfer.py
 10. Click the **Create** button.
 11. Click the **Download JSON** button.
 12. Rename the downloaded JSON file to **client_id**.
-13. Copy and paste the file in the folder where _transfer.py_ is.
+13. Move the file in the folder where _transfer.py_ is.
 
 ### Get your Spotify ID
 
@@ -104,7 +110,7 @@ python transfer.py -liked
 
 ### How to get a Spotify token
 
-Before using the script you need an Oauth Token provided by Spotify.
+Before using the script you need an OAuth Token provided by the Spotify .
 **NOTE: API tokens obtain this method expire after an hour. If a token expires, you need to repeat these steps.**
 
 1. Go to [Spotify API: Get users profile](https://developer.spotify.com/console/get-users-profile/).
@@ -121,9 +127,9 @@ Before using the script you need an Oauth Token provided by Spotify.
 4. Copy the value displayed in the field **'OAuth Token'**.
 5. Paste it into **spotify_auth.json** in the **'token'** field.
 
-## Known issues
+## Additional information
 
-- Your request might not be completed if you exceed Spotify and / or YouTube API usage quota.
+- Some songs might not be transferred if you exceed Spotify and / or YouTube API usage quota.
 - The script can only retrieve music from public and not age-restricted videos.
 
 ## Resources used
